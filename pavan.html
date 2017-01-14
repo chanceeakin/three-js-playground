@@ -56,69 +56,65 @@
 
 	scene.add( spotLight );
 
-
-			//we make the cube here!
-		var geometry = new THREE.TorusGeometry( 5, 3, 16, 100 );
-		var material	= new THREE.MeshPhongMaterial({ color: 0xBADA55 });
+		// Make all the objects!
+		//fruit loop 1
+		var geometry1 = new THREE.TorusGeometry( 5, 3, 16, 100 );
+		var material1	= new THREE.MeshPhongMaterial({ color: 0xBADA55 });
+		var fruitLoop1 = new THREE.Mesh( geometry1, material1 );
 
 		// it's subtle. :)
 		//A mesh is an object that takes a geometry, and applies a material to it, which we then can insert to our scene, and move freely around.
-		var torus = new THREE.Mesh( geometry, material );
 
+		// FRUIT LOOP 2
+		const geometry2 = new THREE.TorusGeometry( 5, 3, 16, 100 );
+		const material2 = new THREE.MeshPhongMaterial({ color: 0xff0033});
+		const fruitLoop2 = new THREE.Mesh( geometry2, material2 );
+		fruitLoop2.position.y = 10;
 
-		const c1 = new THREE.TorusGeometry( 5, 3, 16, 100 );
+		// FRUIT LOOP 3
+		const geometry3 = new THREE.TorusGeometry( 5, 3, 16, 100 );
+		const material3 = new THREE.MeshPhongMaterial({ color: 0x0000ff});
+		const fruitLoop3 = new THREE.Mesh( geometry3, material3 );
+		fruitLoop3.position.x = -5;
 
-		const mat = new THREE.MeshPhongMaterial({ color: 0xff0033});
-		const tor2 = new THREE.Mesh( c1, mat );
-		tor2.position.y = 10;
-
-		const c4 = new THREE.TorusGeometry( 5, 3, 16, 100 );
-
-		const mat4 = new THREE.MeshPhongMaterial({ color: 0x0000ff});
-		const tor4 = new THREE.Mesh( c4, mat4 );
-		tor4.position.x = -5;
-
-		// SPHERE 5, 32, 32, 0, 6.3, 0, 1.6
+		// SPHERE
 		var geom2 = new THREE.SphereGeometry( 15 ,16,16, Math.PI/2, Math.PI, 0, Math.PI );
-
 		var mat2 = new THREE.MeshPhongMaterial( {color: 0xffff00} );
-		// mat2.side = THREE.BackSide;
 		var sphere = new THREE.Mesh( geom2, mat2 );
 		sphere.rotation.x = (Math.PI/180) * 0;
 		sphere.rotation.y = (Math.PI/180) * 0;
 		sphere.rotation.z = (Math.PI/180) * -90;
-		scene.add( sphere );
 
-		// for (var i = 0; )
-		// tor2.position.z = 10;
 
-			//add cube to the scene
+			//add items to the scene
 			//by default it gets added to (0,0,0) - b/c of this the camera and cube are inside each other
-		scene.add(torus);
-		scene.add(tor2);
-		scene.add(tor4);
+		scene.add(fruitLoop1);
+		scene.add(fruitLoop2);
+		scene.add(fruitLoop3);
+		scene.add(sphere);
+
 		//where's the camera relative to the cube?
 			camera.position.y = 10;
 			camera.position.z = 30;
-			// camera.lookAt();
 	//Anything you want to move or change while the app is running has to go through the render loop. This runs 60 times per second.
 		function render() {
 			requestAnimationFrame( render );
 
-			torus.rotation.x += 0.03;
-			torus.rotation.y += 0.03;
-			torus.rotation.z += 0.03;
+			fruitLoop1.rotation.x += 0.03;
+			fruitLoop1.rotation.y += 0.03;
+			fruitLoop1.rotation.z += 0.03;
 
-			tor2.rotation.x -= 0.08;
-			tor2.rotation.y -= 0.05;
-			tor2.rotation.z -= 0.05;
+			fruitLoop2.rotation.x -= 0.08;
+			fruitLoop2.rotation.y -= 0.05;
+			fruitLoop2.rotation.z -= 0.05;
 
-			tor4.rotation.x += 0.03;
-			tor4.rotation.y += 0.08;
-			tor4.rotation.z += 0.02;
+			fruitLoop3.rotation.x += 0.03;
+			fruitLoop3.rotation.y += 0.08;
+			fruitLoop3.rotation.z += 0.02;
 
-  // 		camera.position.x = Math.floor(Math.cos( new Date().getTime() * 0.003 ) * 20);
- //  	camera.position.z = Math.floor(Math.sin( timer ) * 20);
+//  THESE LINES MAKE THE CAMERA MOVE.
+// 		camera.position.x = Math.floor(Math.cos( new Date().getTime() * 0.003 ) * 20);
+//  	camera.position.z = Math.floor(Math.sin( timer ) * 20);
 
 			renderer.render( scene, camera );
 		}
