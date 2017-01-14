@@ -1,0 +1,22 @@
+{
+  "name": "three-js-playground",
+  "version": "1.0.0",
+  "description": "creating projects using 3.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chanceeakin/three-js-playground.git"
+  },
+  "author": "Chance Eakin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chanceeakin/three-js-playground/issues"
+  },
+  "homepage": "https://github.com/chanceeakin/three-js-playground#readme",
+  "dependencies": {
+    "three": "^0.83.0"
+  }
+}
