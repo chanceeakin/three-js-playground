@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Pavan's Example</title>
+	<style type="text/css">
+		html, body { margin: 0, padding: 0, overflow: hidden}
+	</style>
+</head>
+<body>
+
+<script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+<!-- Woooooot. CDN for three.js -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r83/three.min.js"></script>
+<script type="text/javascript">
+	//To actually be able to display anything with three.js, we need three things: A scene, a camera, and a renderer so we can render the scene with the camera.
+	var scene = new THREE.Scene();
+	//There are a few different cameras in three.js. For now, we will use the PerspectiveCamera
+		//THREE.PerspectiveCamera( <FIELD VIEW> , <ASPECT RATIO>, <near clipping plane>, <far clipping plane> )
+			//Clipping Planes: What that means, is that objects further away from the camera than the value of far or closer than near won't be rendered.
+		var camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 0.1, 1000 );
+	//three.js comes with a few other options other than WebGLRenderer, used as fallbacks for users with older browsers
+		var renderer = new THREE.WebGLRenderer();
+		//determines the size at which we want to render our app
+		//you're going to want to reduce the size for performance intense apps
+		// you can also look up how to pass in arguments here to reduce the resolution
+			renderer.setSize( window.innerWidth, window.innerHeight );
+
+				//add the renderer to the html (the canvas element)
+				$('body').append( renderer.domElement );
+				// add some lights!
+		var ambientLight= new THREE.AmbientLight( 0xFFFFFF )
+		scene.add(ambientLight);
+		var frontLight	= new THREE.DirectionalLight('white', 1)
+		frontLight.position.set(0.5, 0.5, 2)
+		scene.add( frontLight )
+		var backLight	= new THREE.DirectionalLight('white', 0.75)
+		backLight.position.set(0, 0, 0)
+		scene.add( backLight );
+		var spotLight = new THREE.SpotLight( 0xffffff );
+		spotLight.position.set( 100, 1000, 100 );
+
+		spotLight.castShadow = true;
+
+		spotLight.shadow.mapSize.width = 1024;
+		spotLight.shadow.mapSize.height = 1024;
+
+		spotLight.shadow.camera.near = 500;
+		spotLight.shadow.camera.far = 4000;
+		spotLight.shadow.camera.fov = 30;
+
+		scene.add( spotLight );
+
+			//we make the cube here!
+		var geometry = new THREE.TorusGeometry( 10, 3, 16, 100 );
+		var material	= new THREE.MeshPhongMaterial({ color: 0xBADA55 });
+		// it's subtle. :)
+		//A mesh is an object that takes a geometry, and applies a material to it, which we then can insert to our scene, and move freely around.
+		var torus = new THREE.Mesh( geometry, material );
+
+		const c1 = new THREE.TorusGeometry( 10, 3, 16, 100 );
+		const mat = new THREE.MeshPhongMaterial({ color: 0xff0033});
+
+		const tor2 = new THREE.Mesh( c1, mat );
+		tor2.position.z = 10;
+
+			//add cube to the scene
+			//by default it gets added to (0,0,0) - b/c of this the camera and cube are inside each other
+		scene.add(torus);
+		scene.add(tor2);
+		//where's the camera relative to the cube?
+			camera.position.y = 0;
+			camera.position.z = 30;
+	//Anything you want to move or change while the app is running has to go through the render loop. This runs 60 times per second.
+		function render() {
+			requestAnimationFrame( render );
+
+			torus.rotation.x += 0.03;
+			torus.rotation.y += 0.03;
+			torus.rotation.z += 0.03;
+
+			tor2.rotation.x -= 0.05;
+			tor2.rotation.y -= 0.05;
+			tor2.rotation.z -= 0.05;
+
+  		camera.position.x = Math.floor(Math.cos( new Date().getTime() * 0.003 ) * 20);
+ //  	camera.position.z = Math.floor(Math.sin( timer ) * 20);
+
+			renderer.render( scene, camera );
+		}
+		render();
+</script>
+</body>
+</html>
+
+Contact GitHub API Training Shop Blog About
+© 2017 GitHub, Inc. Terms Privacy Security Status Help
+<!-- http://www.96methods.com/2011/12/three-js-moving-the-camera/ -->
+<!-- https://threejs.org/docs/index.html#Reference/Cameras/Camera -->
