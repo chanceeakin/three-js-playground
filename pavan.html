@@ -17,10 +17,11 @@
 <script type="text/javascript">
 	//To actually be able to display anything with three.js, we need three things: A scene, a camera, and a renderer so we can render the scene with the camera.
 	var scene = new THREE.Scene();
+	// scene.background = new THREE.Color( 0xff0000 );
 	//There are a few different cameras in three.js. For now, we will use the PerspectiveCamera
 		//THREE.PerspectiveCamera( <FIELD VIEW> , <ASPECT RATIO>, <near clipping plane>, <far clipping plane> )
 			//Clipping Planes: What that means, is that objects further away from the camera than the value of far or closer than near won't be rendered.
-		var camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 0.1, 1000 );
+		var camera = new THREE.PerspectiveCamera( 100, window.innerWidth / window.innerHeight, 0.1, 1000 );
 	//three.js comes with a few other options other than WebGLRenderer, used as fallbacks for users with older browsers
 		var renderer = new THREE.WebGLRenderer();
 		//determines the size at which we want to render our app
@@ -31,48 +32,75 @@
 				//add the renderer to the html (the canvas element)
 				$('body').append( renderer.domElement );
 				// add some lights!
-		var ambientLight= new THREE.AmbientLight( 0xFFFFFF )
+		var ambientLight= new THREE.AmbientLight( 'green' )
 		scene.add(ambientLight);
 		var frontLight	= new THREE.DirectionalLight('white', 1)
 		frontLight.position.set(0.5, 0.5, 2)
 		scene.add( frontLight )
-		var backLight	= new THREE.DirectionalLight('white', 0.75)
+		var light = new THREE.HemisphereLight( 0xffffbb, 'purple', 1 );
+		scene.add( light );
+		var backLight	= new THREE.DirectionalLight('purple', 0.75)
 		backLight.position.set(0, 0, 0)
 		scene.add( backLight );
 		var spotLight = new THREE.SpotLight( 0xffffff );
-		spotLight.position.set( 100, 1000, 100 );
+		spotLight.position.set( 100, 500, 100 );
 
-		spotLight.castShadow = true;
+	spotLight.castShadow = true;
 
-		spotLight.shadow.mapSize.width = 1024;
-		spotLight.shadow.mapSize.height = 1024;
+	spotLight.shadow.mapSize.width = 1024;
+	spotLight.shadow.mapSize.height = 1024;
 
-		spotLight.shadow.camera.near = 500;
-		spotLight.shadow.camera.far = 4000;
-		spotLight.shadow.camera.fov = 30;
+	spotLight.shadow.camera.near = 500;
+	spotLight.shadow.camera.far = 4000;
+	spotLight.shadow.camera.fov = 30;
 
-		scene.add( spotLight );
+	scene.add( spotLight );
+
 
 			//we make the cube here!
-		var geometry = new THREE.TorusGeometry( 10, 3, 16, 100 );
+		var geometry = new THREE.TorusGeometry( 5, 3, 16, 100 );
 		var material	= new THREE.MeshPhongMaterial({ color: 0xBADA55 });
+
 		// it's subtle. :)
 		//A mesh is an object that takes a geometry, and applies a material to it, which we then can insert to our scene, and move freely around.
 		var torus = new THREE.Mesh( geometry, material );
 
-		const c1 = new THREE.TorusGeometry( 10, 3, 16, 100 );
-		const mat = new THREE.MeshPhongMaterial({ color: 0xff0033});
 
+		const c1 = new THREE.TorusGeometry( 5, 3, 16, 100 );
+
+		const mat = new THREE.MeshPhongMaterial({ color: 0xff0033});
 		const tor2 = new THREE.Mesh( c1, mat );
-		tor2.position.z = 10;
+		tor2.position.y = 10;
+
+		const c4 = new THREE.TorusGeometry( 5, 3, 16, 100 );
+
+		const mat4 = new THREE.MeshPhongMaterial({ color: 0x0000ff});
+		const tor4 = new THREE.Mesh( c4, mat4 );
+		tor4.position.x = -5;
+
+		// SPHERE 5, 32, 32, 0, 6.3, 0, 1.6
+		var geom2 = new THREE.SphereGeometry( 15 ,16,16, Math.PI/2, Math.PI, 0, Math.PI );
+
+		var mat2 = new THREE.MeshPhongMaterial( {color: 0xffff00} );
+		// mat2.side = THREE.BackSide;
+		var sphere = new THREE.Mesh( geom2, mat2 );
+		sphere.rotation.x = (Math.PI/180) * 0;
+		sphere.rotation.y = (Math.PI/180) * 0;
+		sphere.rotation.z = (Math.PI/180) * -90;
+		scene.add( sphere );
+
+		// for (var i = 0; )
+		// tor2.position.z = 10;
 
 			//add cube to the scene
 			//by default it gets added to (0,0,0) - b/c of this the camera and cube are inside each other
 		scene.add(torus);
 		scene.add(tor2);
+		scene.add(tor4);
 		//where's the camera relative to the cube?
-			camera.position.y = 0;
+			camera.position.y = 10;
 			camera.position.z = 30;
+			// camera.lookAt();
 	//Anything you want to move or change while the app is running has to go through the render loop. This runs 60 times per second.
 		function render() {
 			requestAnimationFrame( render );
@@ -81,11 +109,15 @@
 			torus.rotation.y += 0.03;
 			torus.rotation.z += 0.03;
 
-			tor2.rotation.x -= 0.05;
+			tor2.rotation.x -= 0.08;
 			tor2.rotation.y -= 0.05;
 			tor2.rotation.z -= 0.05;
 
-  		camera.position.x = Math.floor(Math.cos( new Date().getTime() * 0.003 ) * 20);
+			tor4.rotation.x += 0.03;
+			tor4.rotation.y += 0.08;
+			tor4.rotation.z += 0.02;
+
+  // 		camera.position.x = Math.floor(Math.cos( new Date().getTime() * 0.003 ) * 20);
  //  	camera.position.z = Math.floor(Math.sin( timer ) * 20);
 
 			renderer.render( scene, camera );
@@ -99,3 +131,5 @@ Contact GitHub API Training Shop Blog About
 © 2017 GitHub, Inc. Terms Privacy Security Status Help
 <!-- http://www.96methods.com/2011/12/three-js-moving-the-camera/ -->
 <!-- https://threejs.org/docs/index.html#Reference/Cameras/Camera -->
+<!-- https://github.com/Bash-it/bash-it -->
+<!-- https://github.com/mbadolato/iTerm2-Color-Schemes -->
