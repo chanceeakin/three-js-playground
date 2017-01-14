@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Pavan's Example</title>
+	<style type="text/css">
+		html, body { margin: 0, padding: 0, overflow: hidden, background-color: 'white'}
+	</style>
+</head>
+<body>
+
+<script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+<!-- Woooooot. CDN for three.js -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r83/three.min.js"></script>
+<script type="text/javascript">
+	var scene = new THREE.Scene();
+
+		var camera = new THREE.PerspectiveCamera( 100, window.innerWidth / window.innerHeight, 0.1, 1000 );
+		var renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+
+		$('body').append( renderer.domElement );
+				// add some lights!
+		// var ambientLight= new THREE.AmbientLight( 'white' )
+		// scene.add(ambientLight);
+		var frontLight	= new THREE.DirectionalLight('white', 1)
+		frontLight.position.set(0.5, 0.5, 2)
+		scene.add( frontLight )
+		var backLight	= new THREE.DirectionalLight('white', 0.75)
+		backLight.position.set(0, 0, 0)
+		scene.add( backLight );
+
+		// SpotLight
+		var spotLight = new THREE.SpotLight(0xffffff, 2, 200, 0.5, 0.5, 1);
+		spotLight.position.set(100, 50, 100 );
+		scene.add( spotLight );
+
+
+		// Make all the objects!
+		//fruit loop 1
+		var geometry1 = new THREE.TorusGeometry( 16, 1, 16, 100 );
+		var material1	= new THREE.MeshLambertMaterial({ color: 0x00ff00 });
+		var fruitLoop1 = new THREE.Mesh( geometry1, material1 );
+
+		// it's subtle. :)
+		//A mesh is an object that takes a geometry, and applies a material to it, which we then can insert to our scene, and move freely around.
+
+		// FRUIT LOOP 2
+		const geometry2 = new THREE.TorusGeometry( 17, 1, 16, 100 );
+		const material2 = new THREE.MeshLambertMaterial({ color: 0xff0000});
+		const fruitLoop2 = new THREE.Mesh( geometry2, material2 );
+
+		// FRUIT LOOP 3
+		const geometry3 = new THREE.TorusGeometry( 18, 1, 16, 100 );
+		const material3 = new THREE.MeshLambertMaterial({ color: 0x0000ff});
+		const fruitLoop3 = new THREE.Mesh( geometry3, material3 );
+
+		// SPHERE
+		var geom2 = new THREE.SphereGeometry(5, 32, 32);
+		var mat2 = new THREE.MeshLambertMaterial( {color: 'tomato'} );
+		var sphere = new THREE.Mesh( geom2, mat2 );
+
+		var geometry4 = new THREE.PlaneGeometry( 50, 50, 1 );
+		var material4 = new THREE.MeshBasicMaterial( {color: 0xcccccc, side: THREE.DoubleSide} );
+		var plane = new THREE.Mesh( geometry4, material4 );
+		plane.rotation.x = 90;
+		plane.rotation.y = 0;
+		plane.position.y = -20;
+
+			//add items to the scene
+			//by default it gets added to (0,0,0) - b/c of this the camera and cube are inside each other
+		scene.add(fruitLoop1);
+		scene.add(fruitLoop2);
+		scene.add(fruitLoop3);
+		scene.add(sphere);
+		scene.add( plane );
+
+		//where's the camera relative to the cube?
+			camera.position.set(10,10,50);
+			camera.lookAt(0,0,0);
+			console.log(camera.position);
+	//Anything you want to move or change while the app is running has to go through the render loop. This runs 60 times per second.
+		function render() {
+			requestAnimationFrame( render );
+
+			fruitLoop1.rotation.x += 0.005;
+			fruitLoop1.rotation.y += 0.005;
+
+			fruitLoop2.rotation.x += 0.003
+			fruitLoop2.rotation.y -= 0.008;
+
+			fruitLoop3.rotation.x += 0.003;
+			fruitLoop3.rotation.y += 0.008;
+
+//  THESE LINES MAKE THE CAMERA MOVE.
+		camera.position.x = Math.floor(Math.cos( new Date().getTime() * 0.003 ) * 20);
+ 	// 	camera.position.z = Math.floor(Math.sin( timer ) * 20);
+
+			renderer.render( scene, camera );
+		}
+		render();
+</script>
+</body>
+</html>
+
+Contact GitHub API Training Shop Blog About
+© 2017 GitHub, Inc. Terms Privacy Security Status Help
+<!-- http://www.96methods.com/2011/12/three-js-moving-the-camera/ -->
+<!-- https://threejs.org/docs/index.html#Reference/Cameras/Camera -->
+<!-- https://github.com/Bash-it/bash-it -->
+<!-- https://github.com/mbadolato/iTerm2-Color-Schemes -->
